@@ -242,7 +242,37 @@ var mergeLinkedLists = function(linkedListOne, linkedListTwo){
 
 var cardGame = function(playerOneCards, playerTwoCards){
   // Tu código aca:
+  var cast1 = 100;
+  var cast2 = 100;
 
+  do{    
+
+    var cardP1Atk = playerOneCards.dequeue();
+    var cardP1Def = playerOneCards.dequeue();
+    var cardP2Atk = playerTwoCards.dequeue();
+    var cardP2Def = playerTwoCards.dequeue();
+
+    var atkP1 = cardP1Atk - cardP2Def;
+    if(atkP1 > 0) cast2 -=atkP1;
+
+    var atkP2 = cardP2Atk - cardP1Def;
+    if(atkP2 > 0) cast1 -=atkP2;
+
+    if (cast1 < 0 || cast1 < 0) {               
+      break
+    }
+
+  }
+  while (playerOneCards.size() > 0 || playerTwoCards.size() >0);  
+
+  if(cast1 > cast2) {
+    return 'PLAYER ONE';
+  } else
+  if(cast2 > cast1) {
+    return 'PLAYER TWO';
+  } else{
+    return 'TIE';
+  }
 }
 
 // ---------------
