@@ -39,7 +39,18 @@ const {
 
 var isAncestor = function(genealogyTree, ancestor, descendant){
   // Tu código aca:
+  if(genealogyTree[ancestor].length <=0) return false;
 
+  for(var i=0; i<genealogyTree[ancestor].length; i++){
+    var persona = genealogyTree[ancestor][i];
+    if (persona === descendant){
+      return true;
+    }
+    if(genealogyTree[persona].length > 0){
+      return isAncestor(genealogyTree, persona, descendant);
+    }
+  }
+  return false;
 }
 
 
@@ -77,7 +88,20 @@ var isAncestor = function(genealogyTree, ancestor, descendant){
 
 function secuenciaHenry(obj, n) {
   // Tu código aca:
+  var number1 = 0;
+  var number2 = 0;
 
+  for(var property in obj){
+      number1 = obj.first;
+   if(typeof obj[property] === 'object' && !Array.isArray(obj[property])) {
+      number2 =Object.keys(obj).length;
+    }
+  }
+  if(n === 0) return number1;
+  if(n === 1) return number2;
+  if(n<0) return null;
+  //console.log(number2);
+  return secuenciaHenry(obj, n-1) * secuenciaHenry(obj, n-2) - secuenciaHenry(obj, n-2);
 }
 
 // ---------------------
@@ -98,7 +122,16 @@ function secuenciaHenry(obj, n) {
 
 LinkedList.prototype.size = function(){
   // Tu código aca:
-
+  if(!this.head) return 0;
+  var current = this.head;
+  var sum = 1;
+  if(current.next !==null){
+    while (current.next){
+      sum++;
+      current =current.next;
+    }
+  }
+  return sum;
 }
 
 
@@ -119,6 +152,21 @@ LinkedList.prototype.size = function(){
 
 LinkedList.prototype.switchPos = function(pos1, pos2){
   // Tu código aca:
+var first = this.head;
+var second = this.head;
+if(pos1 > this.size() || pos2 > this.size() || pos1 < 0 || pos2 < 0) return false;
+if(this.head === null) return false;
+for (var i=0; i<pos1; i++){
+  first = first.next;
+}
+var auxValue = first.value;
+for(var i=0; i<pos2; i++){
+  second =second.next;
+}
+var secondValue = second.value;
+first.value = secondValue;
+second.value = auxValue;
+return true;
 
 }
 
@@ -135,7 +183,18 @@ LinkedList.prototype.switchPos = function(pos1, pos2){
 // Continuando con el nodo 2 de la lista 2, conectandose con el nodo 2 de la lista 2.
 var mergeLinkedLists = function(linkedListOne, linkedListTwo){
   // Tu código aca:
+  var list1 = linkedListOne.head;
+  var list2 = linkedListTwo.head;
+  var tam = linkedListOne.size();
+  var newList = new LinkedList();
 
+  for (var i = tam; i>0; i--){
+    newList.add(list1.value);
+    newList.add(list2.value);
+    list1 = list1.next;
+    list2 = list2.next;
+  }
+  return newList;
 }
 
 
@@ -207,6 +266,11 @@ var cardGame = function(playerOneCards, playerTwoCards){
 
 BinarySearchTree.prototype.height = function(){
   // Tu código aca:
+  if(!this.left && !this.right) return 1;
+  if(!this.left) return 1 + this.right.height();
+  if(!this.right) return 1 + this.left.height();
+
+  return 1 + Math.max(this.left.height(), this.right.height())
 
 }
 
@@ -229,7 +293,24 @@ BinarySearchTree.prototype.height = function(){
 
 var binarySearch = function (array, target) {
   // Tu código aca:
+  var first = 0;
+  var tam  = array.length-1;
+  var a = -1;
+  var b = false;
+  var c;
 
+  while(b === false && first<= tam){
+    c = Math.floor((first+tam)/2);
+    if(array[c]== target){
+      b =true;
+      a = c;
+    } else if(array[c] > target){
+      tam = c - 1;
+    } else {
+      first = c + 1;
+    }
+  }
+  return a;
 }
 
 // EJERCICIO 9
@@ -257,7 +338,19 @@ var binarySearch = function (array, target) {
 
 var specialSort = function(array, orderFunction) {
   // Tu código aca:
-
+    var change = true;
+      while(change) {
+        change =false;
+    for (var i=0; i<array.length-1; i++){
+      if(orderFunction(array[i], array[i+1]) === -1){
+        var aux = array[i];
+        array[i] = array[i+1];
+        array[i+1] = aux;
+        change = true;
+      }
+    }
+  }
+  return array;
 }
 
 // ----- Closures -----
@@ -290,6 +383,14 @@ var specialSort = function(array, orderFunction) {
 
 function closureDetect(symptoms, min) {
   // Tu código aca:
+  return function (persona) {
+    var sint = 0;
+    for (var i =0; i<symptoms.length; i++) {
+      if(symptoms.includes(persona.symptoms[i])) sint++;
+    }
+    if(sint >= min) return true;
+    return false;
+  }
 
 }
 
